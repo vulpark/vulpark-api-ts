@@ -89,7 +89,7 @@ message.init()
 type PromiseResponse<T> = Promise<Response<T>>
 
 export interface Client {
-    createMessage(content: string): PromiseResponse<MessageResponse>
+    createMessage(channel_id: string, content: string): PromiseResponse<MessageResponse>
     fetchMessagesBefore(before: Date, max?: number): PromiseResponse<MessageResponse[]>
     fetchMessagesAfter(after: Date, max?: number): PromiseResponse<MessageResponse[]>
     fetchMessage(id: string): PromiseResponse<MessageResponse>
