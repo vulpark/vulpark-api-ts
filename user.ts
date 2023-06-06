@@ -1,4 +1,4 @@
-import {req, Client} from "./mod.ts"
+import {req} from "./mod.ts"
 
 export type User = {
     id: string
@@ -11,10 +11,6 @@ export type UserCreateResponse = {
     token: string
 }
 
-export async function user_fetch(ctx: Client, id: string) {
-    return await req<User>(ctx, "get", "/users/" + id)
-}
-
-export async function user_create(ctx: Client, username: string) {
-    return await req<UserCreateResponse>(ctx, "post", "/users", JSON.stringify({username}))
+export async function createUser(username: string) {
+    return await req<UserCreateResponse>("post", "/users", JSON.stringify({username}))
 }
