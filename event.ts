@@ -39,12 +39,13 @@ export type MessageCreate = {
     author?: User
 }
 
-export type Response<T> = { Success: {data: T}, Error?: undefined} | {Success?: undefined, Error: {status_code: number, message: string } }
+export type Response<T> = T | {error_code: number, message: string}
 
 const listeners: EventCallback<EventType>[] = []
 
 export function on_event<T extends EventType>(type: T, func: (event: SpecificEvent<T>) => void|Promise<void>) {
-    listeners.push({type, func})
+    // @ts-ignore we know it'll work.
+    listeners.push({type, func })
 }
 
 export function dispatch_event(event: Event) {
@@ -54,4 +55,3 @@ export function dispatch_event(event: Event) {
             it.func(ev)
     })
 }
-

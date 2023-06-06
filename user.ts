@@ -1,4 +1,4 @@
-import {req, ServerContext} from "./mod.ts"
+import {req, Client} from "./mod.ts"
 
 export type User = {
     id: string
@@ -6,10 +6,15 @@ export type User = {
     discriminator: string
 }
 
-export async function user_fetch(ctx: ServerContext, id: string) {
+export type UserCreateResponse = {
+    user: User,
+    token: string
+}
+
+export async function user_fetch(ctx: Client, id: string) {
     return await req<User>(ctx, "get", "/users/" + id)
 }
 
-export async function user_create(ctx: ServerContext, user: User) {
-    return await req(ctx, "post", "/users", JSON.stringify(user))
-} 
+export async function user_create(ctx: Client, username: string) {
+    return await req<UserCreateResponse>(ctx, "post", "/users", JSON.stringify({username}))
+}

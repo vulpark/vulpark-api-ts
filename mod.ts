@@ -4,10 +4,8 @@ export * from "./message.ts"
 export * from "./channel.ts"
 
 import { on_event, dispatch_event, Response } from "./event.ts"
-import {User} from "./user.ts";
-import {Message} from "./message.ts"
 
-export class ServerContext {
+export class Client {
     base_url: string
     client: WebSocket
     token: string
@@ -30,11 +28,12 @@ export class ServerContext {
         })
     }
 }
-export async function req<T>(ctx: ServerContext, method: string, path: string, body?: string): Promise<Response<T>> {
+export async function req<T>(ctx: Client, method: string, path: string, body?: string): Promise<Response<T>> {
     return (await fetch("http://" + ctx.base_url + path, {
         method, body,
+        // @ts-ignore type checker is dumb sometimes
         headers: {
-            "Content-Type": body ? "applicatioon/json" : undefined,
+            "Content-Type": body ? "application/json" : undefined,
             "Authorization": ctx.token
         }
     })).json()

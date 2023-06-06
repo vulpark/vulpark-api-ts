@@ -2,9 +2,9 @@ import { crayon } from "https://deno.land/x/crayon@3.3.3/mod.ts"
 import { Box, TextBox, Label } from "https://deno.land/x/tui@2.0.0-RC4/src/components/mod.ts"
 import { handleInput, handleKeyboardControls, handleMouseControls, Tui } from "https://deno.land/x/tui@2.0.0-RC4/mod.ts"
 import { Key } from "https://deno.land/x/tui@2.0.0-RC4/src/input_reader/types.ts"
-import {ServerContext, on_event, message_fetch_before, user_fetch, message_create} from "./mod.ts";
+import {Client, on_event, message_fetch_before, user_fetch, message_create} from "./mod.ts";
 
-const ctx = new ServerContext("127.0.0.1:8000", "01H1X4PJY8AHR3Q2CFTBE7P75H")
+const ctx = new Client("127.0.0.1:8000", "01H1X4PJY8AHR3Q2CFTBE7P75H")
 const tui = new Tui({})
 
 handleInput(tui);
