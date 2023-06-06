@@ -1,4 +1,6 @@
-import { Channel, MessageResponse, User } from "./mod.ts"
+import { Channel } from "./channel.ts";
+import { MessageResponse } from "./message.ts";
+import { User } from "./user.ts";
 
 export type EventType = keyof Event
 

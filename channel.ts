@@ -1,4 +1,4 @@
-import { User } from "./mod.ts"
+import { User } from "./user.ts"
 
 export type Channel = {
     id: string

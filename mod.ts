@@ -1,23 +1,22 @@
-export * from "./event.ts"
-export * from "./user.ts"
-export * from "./message.ts"
-export * from "./channel.ts"
-
 import { Event, EventType, Response, SpecificEvent } from "./event.ts"
 import { MessageResponse } from "./message.ts";
+import * as message from "./message.ts";
 import { User } from "./user.ts";
-
+import * as user from "./user.ts"
 const BASE_URL = "127.0.0.1:8000"
 
 export async function req<T>(method: string, path: string, body?: string, token?: string): Promise<Response<T>> {
-    return (await fetch("http://" + BASE_URL + path, {
+    const res = await fetch("http://" + BASE_URL + path, {
         method, body,
         // @ts-ignore type checker is dumb sometimes
         headers: {
             "Content-Type": body ? "application/json" : undefined,
             "Authorization": token
         }
-    })).json()
+    })
+    const text = await res.text()
+    console.log(text)
+    return JSON.parse(text)
 }
 
 type EventBus = {
@@ -29,6 +28,7 @@ export class Client {
     token: string
     private bus: EventBus = {}
     private busAny: ((event: Event) => void|Promise<void>)[] = []
+
     constructor(token: string) {
         this.socket = new WebSocket(`ws://${BASE_URL}/gateway`)
         this.token = token
@@ -81,24 +81,18 @@ export class Client {
     async req<T>(method: string, path: string, body?: string) {
         return await req<T>(method, path, body, this.token)
     }
+}
 
-    async createMessage(content: string) {
-        return await this.req<MessageResponse>("post", "/messages", JSON.stringify({content}))
-    }
+user.init()
+message.init()
 
-    async fetchMessagesAfter(after: Date, max = 25) {
-        return await this.req<MessageResponse[]>("get", "/messages?after="+encodeURIComponent(after.toISOString())+"&max="+max)
-    }
+type PromiseResponse<T> = Promise<Response<T>>
 
-    async fetchMessagesBefore(before: Date, max = 25) {
-        return await this.req<MessageResponse[]>("get", "/messages?before="+encodeURIComponent(before.toISOString())+"&max="+max)
-    }
+export interface Client {
+    createMessage(content: string): PromiseResponse<MessageResponse>
+    fetchMessagesBefore(before: Date, max?: number): PromiseResponse<MessageResponse[]>
+    fetchMessagesAfter(after: Date, max?: number): PromiseResponse<MessageResponse[]>
+    fetchMessage(id: string): PromiseResponse<MessageResponse>
 
-    async fetchMessage(id: string) {
-        return await this.req<MessageResponse>("get", "/messages/"+id)
-    }
-
-    async fetchUser(id: string) {
-        return await this.req<User>("get", "/users/" + id)
-    }
+    fetchUser(id: string): PromiseResponse<User>
 }
