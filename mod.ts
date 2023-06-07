@@ -53,16 +53,17 @@ export class Client {
                 console.error(e)
             }
         }
-        for (const k in event) {
-            const events = this.bus[k as EventType]
-            if (events) {
-                for (const callback of events) {
-                    try {
-                        //@ts-ignore It's guarunteed that it's right.
-                        await callback(event[k])
-                    } catch (e) {
-                        console.error(e)
-                    }
+        for (const k in this.bus) {
+            const t = k as EventType
+            const events = this.bus[t]!
+            const ev: SpecificEvent<typeof t> = event[t] as SpecificEvent<typeof t>
+            if (!ev) continue
+            for (const callback of events) {
+                const cb = callback as (event: typeof ev) => void|Promise<void>
+                try {
+                    await cb(ev)
+                } catch (e) {
+                    console.error(e)
                 }
             }
         }
