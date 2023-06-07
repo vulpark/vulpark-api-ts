@@ -56,7 +56,7 @@ export class Client {
         for (const k in this.bus) {
             const t = k as EventType
             const events = this.bus[t]!
-            const ev: SpecificEvent<typeof t> = event[t] as SpecificEvent<typeof t>
+            const ev = event[t] as SpecificEvent<typeof t>
             if (!ev) continue
             for (const callback of events) {
                 const cb = callback as (event: typeof ev) => void|Promise<void>
