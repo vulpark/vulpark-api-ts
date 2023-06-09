@@ -79,7 +79,7 @@ export class Client {
         this.busAny.push(callback)
     }
 
-    async req<T>(method: string, path: string, body?: string) {
+    async req<T>(method: string, path: string, body?: unknown) {
         return await req<T>(method, path, body, this.token)
     }
 }
