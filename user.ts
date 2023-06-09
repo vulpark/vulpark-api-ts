@@ -20,7 +20,7 @@ export type UserLoginResponse = {
 }
 
 export async function createUser(user: UserCreate) {
-    return await req<UserLoginResponse>("post", "/users", JSON.stringify(user))
+    return await req<UserLoginResponse>("post", "/users", user)
 }
 
 export function init() {

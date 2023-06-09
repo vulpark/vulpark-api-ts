@@ -5,9 +5,9 @@ import { User } from "./user.ts";
 import * as user from "./user.ts"
 const BASE_URL = "127.0.0.1:8000"
 
-export async function req<T>(method: string, path: string, body?: string, token?: string): Promise<Response<T>> {
+export async function req<T>(method: string, path: string, body?: unknown, token?: string): Promise<Response<T>> {
     const res = await fetch("http://" + BASE_URL + path, {
-        method, body,
+        method, body: body ? JSON.stringify(body) : undefined,
         // @ts-ignore type checker is dumb sometimes
         headers: {
             "Content-Type": body ? "application/json" : undefined,

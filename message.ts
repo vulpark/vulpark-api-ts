@@ -15,7 +15,7 @@ export type MessageResponse = {
 
 export function init() {
     Client.prototype.createMessage = async function (channel_id, content) {
-        return await this.req<MessageResponse>("post", "/messages", JSON.stringify({channel_id, content}))
+        return await this.req<MessageResponse>("post", "/messages", {channel_id, content})
     }
     Client.prototype.fetchMessagesAfter = async function (after, max = 25) {
         return await this.req<MessageResponse[]>("get", "/messages?after="+encodeURIComponent(after.toISOString())+"&max="+max)
