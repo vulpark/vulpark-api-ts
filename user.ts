@@ -6,13 +6,21 @@ export type User = {
     discriminator: string
 }
 
-export type UserCreateResponse = {
+export type LoginService = "github"
+
+export type UserCreate = {
+    username: string
+    service: LoginService
+    oauth_code: string
+}
+
+export type UserLoginResponse = {
     user: User,
     token: string
 }
 
-export async function createUser(username: string) {
-    return await req<UserCreateResponse>("post", "/users", JSON.stringify({username}))
+export async function createUser(user: UserCreate) {
+    return await req<UserLoginResponse>("post", "/users", JSON.stringify(user))
 }
 
 export function init() {
