@@ -2,16 +2,18 @@ import { Channel } from "./channel.ts";
 import { MessageResponse } from "./message.ts";
 import { User } from "./user.ts";
 
-export type EventType = keyof Event
+import { REnum } from "./renum.ts";
 
-export type Event = {
-    HandshakeStart?: Record<string, unknown>
-    HandshakeComplete?: HandshakeComplete
-    MessageCreate?: MessageResponse
-    ChannelCreate?: ChannelCreate
-}
+export type EventType = Event extends string ? Event : keyof Event
 
-export type SpecificEvent<T extends EventType> = Event[T] & Record<string|number|symbol, unknown>
+export type Event = REnum<{
+    HandshakeStart: Record<never, never>
+    HandshakeComplete: HandshakeComplete
+    MessageCreate: MessageResponse
+    ChannelCreate: ChannelCreate
+}>
+
+export type SpecificEvent<T extends EventType> = NonNullable<Event[T]>
 
 export type EventCallback<T extends EventType> = {
     type: T,

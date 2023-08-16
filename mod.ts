@@ -10,7 +10,9 @@ export async function req<T>(method: string, path: string, body?: unknown, token
         method, body: body ? JSON.stringify(body) : undefined,
         // @ts-ignore type checker is dumb sometimes
         headers: {
+            // @ts-ignore it's allowed TS is just mean
             "Content-Type": body ? "application/json" : undefined,
+            // @ts-ignore it's allowed TS is just mean
             "Authorization": token
         }
     })
